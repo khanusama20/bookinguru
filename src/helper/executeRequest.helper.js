@@ -35,6 +35,13 @@ class ExecuteHttpRequest {
         return this;
     }
 
+    setBearerToken(token) {
+        this.headers = {
+            ...this.headers, "Authorization": "Bearer".concat(" ").concat(token)
+        }
+        return this;
+    }
+
     setData (data) {
         this.data = data;
         return this;
@@ -47,6 +54,9 @@ class ExecuteHttpRequest {
             headers: this.headers,
             data: this.data
         };
+
+        console.log(config)
+
         const response = await axios(config);
         return response;
     }

@@ -7,12 +7,48 @@ const getAccessToken = async (user, pass) => {
     .setMethod('POST')
     .setData({
         "username": user ? user : process.env.USER_NAME,
-        "password": pass ? pass : process.env.testpass
+        "password": pass ? pass : process.env.ACCESS_KEY
     }).execute()
 
     return result;
 }
 
+const getPollution = async (token, countryCode, pageNo, limit = 10) => {
+    let baseURL = `${process.env.BASE_URL}${process.env.POLLUTION_DATA}`;
+    let queryParams = [];
+    
+    if (countryCode) {
+        queryParams.push(`country=${countryCode}`);
+    }
+    
+    if (pageNo) {
+        queryParams.push(`page=${pageNo}`);
+    }
+    
+    if (limit) {
+        queryParams.push(`limit=${limit}`);
+    }
+    
+    queryParams.forEach((param, index) => {
+        if (index == 0) {
+            baseURL += `?${param}`;
+        } else {
+            baseURL += `&${param}`;
+        }
+    });
+
+    const result = await guruRequest
+    .setURL(baseURL)
+    .setMethod('GET')
+    .setBearerToken(token)
+    .execute()
+
+    return result;
+}
+
+
+
 module.exports = {
-    getAccessToken
+    getAccessToken,
+    getPollution
 }

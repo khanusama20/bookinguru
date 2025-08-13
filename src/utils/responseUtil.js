@@ -29,7 +29,7 @@ class ResponseUtil {
     static internalServerError() {
         return new ResponseUtil(ErrType.ERROR, "Internal server error", ErrCode.EXCEPTION);
     }
-
+    
     static notFound(message = "Data not found", code = ErrCode.DATA_NOT_FOUND) {
         return new ResponseUtil(ErrType.INFO, message, code);
     }
