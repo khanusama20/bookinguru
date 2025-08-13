@@ -1,8 +1,13 @@
 const express = require("express");
+const appRoutes = express.Router();
 
-const appAuthRoutes = express.Router();
-const appSecureRoutes = express.Router();
+const [ authRoutes ] = require("./auth.routes");
+const [ secureRoutes ] = require("./secure.routes");
 
-const controllers = require("../controller/controllers.index");
+appRoutes.use("/auth", authRoutes);
 
-appAuthRoutes.post("/access-token", controllers.accessToken)
+appRoutes.use("/secure", secureRoutes);
+
+module.exports = {
+    appRoutes
+}
