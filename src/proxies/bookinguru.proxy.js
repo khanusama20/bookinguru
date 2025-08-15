@@ -1,4 +1,4 @@
-const guruRequest = require("./config/guruClient.request")
+const guruRequest = require("./config/guruClient.request");
 
 const getAccessToken = async (user, pass) => {
     const baseURL = `${process.env.BASE_URL}${process.env.LOGIN_URL}`;
@@ -13,7 +13,7 @@ const getAccessToken = async (user, pass) => {
     return result;
 }
 
-const getPollution = async (token, countryCode, pageNo, limit = 10) => {
+const getPollution = async (countryCode, pageNo) => {
     let baseURL = `${process.env.BASE_URL}${process.env.POLLUTION_DATA}`;
     let queryParams = [];
     
@@ -25,9 +25,9 @@ const getPollution = async (token, countryCode, pageNo, limit = 10) => {
         queryParams.push(`page=${pageNo}`);
     }
     
-    if (limit) {
-        queryParams.push(`limit=${limit}`);
-    }
+    // if (limit) {
+    //     queryParams.push(`limit=${limit}`);
+    // }
     
     queryParams.forEach((param, index) => {
         if (index == 0) {
@@ -37,10 +37,13 @@ const getPollution = async (token, countryCode, pageNo, limit = 10) => {
         }
     });
 
+    console.log("Pollution get " + baseURL);
+
+    const tokenResponse = await getAccessToken();
     const result = await guruRequest
     .setURL(baseURL)
     .setMethod('GET')
-    .setBearerToken(token)
+    .setBearerToken(tokenResponse.data.token)
     .execute()
 
     return result;

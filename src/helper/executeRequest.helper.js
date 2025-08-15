@@ -47,7 +47,7 @@ class ExecuteHttpRequest {
         return this;
     }
 
-    async execute() {
+    async execute(cb) {
         let config = {
             method: this.method,
             url: this.url,
@@ -55,10 +55,20 @@ class ExecuteHttpRequest {
             data: this.data
         };
 
-        console.log(config)
-
-        const response = await axios(config);
-        return response;
+        try {
+            const response = await axios(config);
+            if (typeof cb === "function") {
+                cb(null, response);
+            } else {
+                return response;
+            }
+        } catch (error) {
+            if (typeof cb === "function") {
+                cb(error, null);
+            } else {
+                throw error;
+            }
+        }
     }
 }
 
