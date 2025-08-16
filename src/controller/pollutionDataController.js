@@ -43,7 +43,19 @@ const getCities = async function (req, res) {
 
         if (wikiPPromises.length > 0) {
             const results = await Promise.all(wikiPPromises);
-            return res.status(200).json(ResponseUtil.success(results));
+            filteredCities.forEach((item, index) => {
+                let currentIndex = results.findIndex(doc => doc != null && doc.title.toLowerCase() == item.name.toLowerCase());
+                if (currentIndex != -1) {
+                    filteredCities[index].description = results[index].extract;
+                }
+            });
+
+            return res.status(200).json(ResponseUtil.success({
+                page: pageNo,
+                limit: 10,
+                total: filteredCities.length,
+                citites: filteredCities
+            }));
         }
 
         return res.status(200).json(ResponseUtil.notFound());
