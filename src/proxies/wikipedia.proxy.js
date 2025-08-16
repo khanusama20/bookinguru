@@ -10,7 +10,7 @@ const getWikipediaSummary = city => {
             .setMethod('GET')
             .execute((error, res) => {
                 if (error) {
-                    reject(error);
+                    resolve(null);
                 } else {
                     if (res.data.type == "standard") {
                         resolve(res.data);
